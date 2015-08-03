@@ -3,7 +3,7 @@
 # refer to the root source directory of the project as ${CMAKE_SOURCE_DIR} or
 # ${CMAKE_SOURCE_DIR} and to the root binary directory of the project as
 # ${CMAKE_BINARY_DIR} or ${CMAKE_BINARY_DIR}.
-project(CGAL CXX C)
+#project(CGAL CXX C)
 
 # Minimal version of CMake:
 if(WIN32)
@@ -560,10 +560,10 @@ set_special_prefix(QGLViewer QGLVIEWER)
 set_special_prefix(Coin3D COIN3D)
 
 # some libraries are essential (stl and Boost.Thread are treated in another way) 
-if($ENV{CGAL_DISABLE_GMP})
-  set(CGAL_DISABLE_GMP ON CACHE INTERNAL "")
-endif()
-if(CGAL_DISABLE_GMP)
+#if($ENV{CGAL_DISABLE_GMP})
+#  set(CGAL_DISABLE_GMP ON CACHE INTERNAL "")
+#endif()
+#if(CGAL_DISABLE_GMP)
   message("Disable the GMP support")
   list(LENGTH CGAL_ESSENTIAL_3RD_PARTY_LIBRARIES CGAL_ESSENTIAL_LENGTH)
   if(NOT CGAL_ESSENTIAL_LENGTH EQUAL 0)
@@ -589,12 +589,12 @@ if(CGAL_DISABLE_GMP)
   # Nasty trick to make sure <gmp.h> is not used when CGAL_DISABLE_GMP is TRUE
   file(WRITE "${CMAKE_BINARY_DIR}/include/gmp.h"
     "#error GMP is disabled by the CMake option CGAL_DISABLE_GMP")
-else()
-  list(APPEND      CGAL_ESSENTIAL_3RD_PARTY_LIBRARIES GMP MPFR)
-  # Where CMake is run several times, to avoid duplicates
-  list (REMOVE_DUPLICATES CGAL_ESSENTIAL_3RD_PARTY_LIBRARIES)
-  file(REMOVE "${CMAKE_BINARY_DIR}/include/gmp.h")
-endif()
+  #else()
+  #  list(APPEND      CGAL_ESSENTIAL_3RD_PARTY_LIBRARIES GMP MPFR)
+  #  # Where CMake is run several times, to avoid duplicates
+  #  list (REMOVE_DUPLICATES CGAL_ESSENTIAL_3RD_PARTY_LIBRARIES)
+  #  file(REMOVE "${CMAKE_BINARY_DIR}/include/gmp.h")
+  #endif()
 hide_variable(CGAL_ESSENTIAL_3RD_PARTY_LIBRARIES)
 
 foreach (lib ${CGAL_SUPPORTING_3RD_PARTY_LIBRARIES}) 
@@ -703,7 +703,7 @@ add_config_flag( CGAL_USE_MPFI )
 add_config_flag( CGAL_USE_RS )
 add_config_flag( CGAL_USE_NTL )
 
-add_config_flag( CGAL_BUILD_SHARED_LIBS )
+#add_config_flag( CGAL_BUILD_SHARED_LIBS )
 
 if (NOT ${WITH_CGAL_Core}) 
   set(CGAL_USE_CORE FALSE)
@@ -724,29 +724,29 @@ endif()
 #
 #--------------------------------------------------------------------------------------------------
 
-set ( CGAL_INSTALL_INC_DIR "include" CACHE STRING "The folder where CGAL header files will be installed, relative to CMAKE_INSTALL_PREFIX" )
-set ( CGAL_INSTALL_LIB_DIR "lib"     CACHE STRING "The folder where CGAL libraries will be installed, relative to CMAKE_INSTALL_PREFIX" )
-
-if ( CGAL_WIN32_CMAKE_ON_CYGWIN )
-  exec_program(cygpath ARGS -w "${CMAKE_INSTALL_PREFIX}" OUTPUT_VARIABLE CMAKE_INSTALL_PREFIX2 )
-  file ( TO_CMAKE_PATH ${CMAKE_INSTALL_PREFIX2} CMAKE_INSTALL_PREFIX )
-endif()
-
-set ( CGAL_INSTALL_BIN_DIR    "bin"                     
-  CACHE STRING "The folder where CGAL user-side scripts will be installed, relative to CMAKE_INSTALL_PREFIX" 
-  )
-
-set ( CGAL_INSTALL_CMAKE_DIR "${CGAL_INSTALL_LIB_DIR}/CGAL"
-  CACHE STRING "The folder where CGAL CMake modules will be installed, relative to CMAKE_INSTALL_PREFIX" 
-  )
-
-set ( CGAL_INSTALL_DOC_DIR "share/doc/${CGAL_VERSION_DIR}"  
-  CACHE STRING "The folder where CGAL documentation and license files will be installed, relative to CMAKE_INSTALL_PREFIX" 
-  )
-
-set ( CGAL_INSTALL_MAN_DIR "share/man/man1"  
-  CACHE STRING "The folder where manual pages for CGAL scripts will be installed, relative to CMAKE_INSTALL_PREFIX" 
-  )
+#set ( CGAL_INSTALL_INC_DIR "include" CACHE STRING "The folder where CGAL header files will be installed, relative to CMAKE_INSTALL_PREFIX" )
+#set ( CGAL_INSTALL_LIB_DIR "lib"     CACHE STRING "The folder where CGAL libraries will be installed, relative to CMAKE_INSTALL_PREFIX" )
+#
+#if ( CGAL_WIN32_CMAKE_ON_CYGWIN )
+#  exec_program(cygpath ARGS -w "${CMAKE_INSTALL_PREFIX}" OUTPUT_VARIABLE CMAKE_INSTALL_PREFIX2 )
+#  file ( TO_CMAKE_PATH ${CMAKE_INSTALL_PREFIX2} CMAKE_INSTALL_PREFIX )
+#endif()
+#
+#set ( CGAL_INSTALL_BIN_DIR    "bin"                     
+#  CACHE STRING "The folder where CGAL user-side scripts will be installed, relative to CMAKE_INSTALL_PREFIX" 
+#  )
+#
+#set ( CGAL_INSTALL_CMAKE_DIR "${CGAL_INSTALL_LIB_DIR}/CGAL"
+#  CACHE STRING "The folder where CGAL CMake modules will be installed, relative to CMAKE_INSTALL_PREFIX" 
+#  )
+#
+#set ( CGAL_INSTALL_DOC_DIR "share/doc/${CGAL_VERSION_DIR}"  
+#  CACHE STRING "The folder where CGAL documentation and license files will be installed, relative to CMAKE_INSTALL_PREFIX" 
+#  )
+#
+#set ( CGAL_INSTALL_MAN_DIR "share/man/man1"  
+#  CACHE STRING "The folder where manual pages for CGAL scripts will be installed, relative to CMAKE_INSTALL_PREFIX" 
+#  )
 
 message("== Write compiler_config.h (DONE) ==\n")
 
@@ -853,46 +853,54 @@ create_CGALconfig_files()
 
 # DESTINATION option is mandatory; skipping it breaks CPack!
 
-if(CGAL_INSTALL_DOC_DIR)
-  install(FILES AUTHORS CHANGES LICENSE LICENSE.FREE_USE LICENSE.GPL LICENSE.LGPL DESTINATION ${CGAL_INSTALL_DOC_DIR} )
-endif()
+#if(CGAL_INSTALL_DOC_DIR)
+#  install(FILES AUTHORS CHANGES LICENSE LICENSE.FREE_USE LICENSE.GPL LICENSE.LGPL DESTINATION ${CGAL_INSTALL_DOC_DIR} )
+#endif()
 
 #install all includes collected in trunk et cetera
 
 
 foreach (dir ${CGAL_CONFIGURED_PACKAGES})
   if (EXISTS ${dir}/include/CGAL) 
-    install(DIRECTORY ${dir}/include/CGAL              DESTINATION ${CGAL_INSTALL_INC_DIR} PATTERN ".svn" EXCLUDE)
+    #    install(DIRECTORY ${dir}/include/CGAL              DESTINATION ${CGAL_INSTALL_INC_DIR} PATTERN ".svn" EXCLUDE)
+    yong_install_header_directories(CGAL
+      DIRECTORIES ${dir}/include/CGAL
+      FILES_MATCHING PATTERN "*" PATTERN ".svn" EXCLUDE
+      )
   endif()
 endforeach()
-install(DIRECTORY ${CMAKE_BINARY_DIR}/include/CGAL     DESTINATION ${CGAL_INSTALL_INC_DIR} PATTERN ".svn" EXCLUDE)
+#install(DIRECTORY ${CMAKE_BINARY_DIR}/include/CGAL     DESTINATION ${CGAL_INSTALL_INC_DIR} PATTERN ".svn" EXCLUDE)
+yong_install_header_directories(CGAL
+  DIRECTORIES ${CMAKE_BINARY_DIR}/include/CGAL
+  FILES_MATCHING PATTERN "*" PATTERN ".svn" EXCLUDE
+  )
 
-file(GLOB scripts "scripts/*")
-list(REMOVE_ITEM scripts 
-  ${CMAKE_CURRENT_SOURCE_DIR}/scripts/cgal_create_assertions.sh 
-  ${CMAKE_CURRENT_SOURCE_DIR}/scripts/cgal_create_cmake_script_with_options)
-install(PROGRAMS ${scripts} DESTINATION ${CGAL_INSTALL_BIN_DIR})
-
-install(DIRECTORY ${CGAL_MODULES_REL_DIR}/                DESTINATION ${CGAL_INSTALL_CMAKE_DIR} )
-install(FILES     ${CGAL_MODULES_REL_DIR}/UseCGAL.cmake   DESTINATION ${CGAL_INSTALL_CMAKE_DIR} )
-
-
-if ( GMP_IN_AUXILIARY )
-  install(DIRECTORY auxiliary/gmp/include/ DESTINATION ${CGAL_INSTALL_INC_DIR} )
-  install(DIRECTORY auxiliary/gmp/lib/     DESTINATION ${CGAL_INSTALL_LIB_DIR} )
-endif()
-
-if ( ZLIB_IN_AUXILIARY )
-  install(DIRECTORY auxiliary/zlib/include/ DESTINATION ${CGAL_INSTALL_INC_DIR} )
-  install(DIRECTORY auxiliary/zlib/lib/     DESTINATION ${CGAL_INSTALL_LIB_DIR} )
-endif()
-
-
-install(FILES ${CMAKE_BINARY_DIR}/config/CGALConfig.cmake DESTINATION ${CGAL_INSTALL_CMAKE_DIR} )
-
-if(CGAL_INSTALL_MAN_DIR)
-  install(FILES auxiliary/cgal_create_cmake_script.1 DESTINATION ${CGAL_INSTALL_MAN_DIR} )
-endif()
+#file(GLOB scripts "scripts/*")
+#list(REMOVE_ITEM scripts 
+#  ${CMAKE_CURRENT_SOURCE_DIR}/scripts/cgal_create_assertions.sh 
+#  ${CMAKE_CURRENT_SOURCE_DIR}/scripts/cgal_create_cmake_script_with_options)
+#install(PROGRAMS ${scripts} DESTINATION ${CGAL_INSTALL_BIN_DIR})
+#
+#install(DIRECTORY ${CGAL_MODULES_REL_DIR}/                DESTINATION ${CGAL_INSTALL_CMAKE_DIR} )
+#install(FILES     ${CGAL_MODULES_REL_DIR}/UseCGAL.cmake   DESTINATION ${CGAL_INSTALL_CMAKE_DIR} )
+#
+#
+#if ( GMP_IN_AUXILIARY )
+#  install(DIRECTORY auxiliary/gmp/include/ DESTINATION ${CGAL_INSTALL_INC_DIR} )
+#  install(DIRECTORY auxiliary/gmp/lib/     DESTINATION ${CGAL_INSTALL_LIB_DIR} )
+#endif()
+#
+#if ( ZLIB_IN_AUXILIARY )
+#  install(DIRECTORY auxiliary/zlib/include/ DESTINATION ${CGAL_INSTALL_INC_DIR} )
+#  install(DIRECTORY auxiliary/zlib/lib/     DESTINATION ${CGAL_INSTALL_LIB_DIR} )
+#endif()
+#
+#
+#install(FILES ${CMAKE_BINARY_DIR}/config/CGALConfig.cmake DESTINATION ${CGAL_INSTALL_CMAKE_DIR} )
+#
+#if(CGAL_INSTALL_MAN_DIR)
+#  install(FILES auxiliary/cgal_create_cmake_script.1 DESTINATION ${CGAL_INSTALL_MAN_DIR} )
+#endif()
 
 #--------------------------------------------------------------------------------------------------
 #
@@ -903,13 +911,13 @@ endif()
 # Installing FindCGAL into cmake itself is implemented as a custom target
 # because it requires superuser privileges
 
-if ( NOT "${CMAKE_ROOT}" STREQUAL "" )
-  if ( EXISTS ${CMAKE_ROOT}/Modules )
-    add_custom_target( install_FindCGAL
-                      COMMAND ${CMAKE_COMMAND} -E copy ${CGAL_MODULES_DIR}/FindCGAL.cmake ${CMAKE_ROOT}/Modules
-                    ) 
-  endif()
-endif()  
+#if ( NOT "${CMAKE_ROOT}" STREQUAL "" )
+#  if ( EXISTS ${CMAKE_ROOT}/Modules )
+#    add_custom_target( install_FindCGAL
+#                      COMMAND ${CMAKE_COMMAND} -E copy ${CGAL_MODULES_DIR}/FindCGAL.cmake ${CMAKE_ROOT}/Modules
+#                    ) 
+#  endif()
+#endif()  
 
 #--------------------------------------------------------------------------------------------------
 #
@@ -917,36 +925,36 @@ endif()
 #
 #--------------------------------------------------------------------------------------------------
 
-macro( add_programs subdir target ON_OFF )
-
-  cache_set( CGAL_EXECUTABLE_TARGETS "" )
-  
-  add_custom_target( ${target} )
-  
-  option( WITH_${target} "Select ${target}" ${ON_OFF} )
-  if ( WITH_${target} )
-    add_subdirectory( ${subdir} EXCLUDE_FROM_ALL )
-  endif()
-  
-  cache_get( CGAL_EXECUTABLE_TARGETS )
-  
-  foreach( CGAL_EXECUTABLE_TARGET ${CGAL_EXECUTABLE_TARGETS} )
-    add_dependencies( ${target} ${CGAL_EXECUTABLE_TARGET} )
-  endforeach()
-     
-endmacro()
-
-# This allows programs to locate CGALConfig.cmake
-set(CGAL_DIR ${CMAKE_BINARY_DIR} )
-
-if ( NOT RUNNING_CGAL_AUTO_TEST )
-
-  add_programs(examples examples OFF )
-  add_programs(demo     demos    OFF )
-  if(IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test")
-    add_programs(test     tests    OFF )
-  endif()
-endif()
+#macro( add_programs subdir target ON_OFF )
+#
+#  cache_set( CGAL_EXECUTABLE_TARGETS "" )
+#  
+#  add_custom_target( ${target} )
+#  
+#  option( WITH_${target} "Select ${target}" ${ON_OFF} )
+#  if ( WITH_${target} )
+#    add_subdirectory( ${subdir} EXCLUDE_FROM_ALL )
+#  endif()
+#  
+#  cache_get( CGAL_EXECUTABLE_TARGETS )
+#  
+#  foreach( CGAL_EXECUTABLE_TARGET ${CGAL_EXECUTABLE_TARGETS} )
+#    add_dependencies( ${target} ${CGAL_EXECUTABLE_TARGET} )
+#  endforeach()
+#     
+#endmacro()
+#
+## This allows programs to locate CGALConfig.cmake
+#set(CGAL_DIR ${CMAKE_BINARY_DIR} )
+#
+#if ( NOT RUNNING_CGAL_AUTO_TEST )
+#
+#  add_programs(examples examples OFF )
+#  add_programs(demo     demos    OFF )
+#  if(IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test")
+#    add_programs(test     tests    OFF )
+#  endif()
+#endif()
 
 #--------------------------------------------------------------------------------------------------
 #
@@ -954,117 +962,117 @@ endif()
 #
 #--------------------------------------------------------------------------------------------------
 
-#option( WITH_CPACK "Create package generation rules")
-if( WITH_CPACK AND EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" )
-
-    set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "CGAL - Computational Geometry Algorithms Library")
-    set(CPACK_PACKAGE_VENDOR "CGAL Open Source Project")
-    set(CPACK_PACKAGE_DESCRIPTION_FILE "${CGAL_INSTALLATION_PACKAGE_DIR}/README")
-    set(CPACK_RESOURCE_FILE_LICENSE "${CGAL_INSTALLATION_PACKAGE_DIR}/LICENSE")
-    set(CPACK_PACKAGE_VERSION_MAJOR "${CGAL_MAJOR_VERSION}")
-    set(CPACK_PACKAGE_VERSION_MINOR "${CGAL_MINOR_VERSION}")
-    set(CPACK_PACKAGE_VERSION_PATCH "${CGAL_BUGFIX_VERSION}")
-    set(CPACK_PACKAGE_INSTALL_DIRECTORY "CGAL ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}")
-    set(CPACK_SOURCE_PACKAGE_FILE_NAME "CGAL-${CGAL_VERSION}")
-    set(CPACK_RESOURCE_FILE_LICENSE "${CGAL_INSTALLATION_PACKAGE_DIR}/LICENSE")
-    
-    if(NOT DEFINED CPACK_SYSTEM_NAME)
-      set(CPACK_SYSTEM_NAME ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR})
-    endif()
-    
-    if(${CPACK_SYSTEM_NAME} MATCHES Windows)
-      if(CMAKE_CL_64)
-        set(CPACK_SYSTEM_NAME win64-${CMAKE_SYSTEM_PROCESSOR})
-      else()
-        set(CPACK_SYSTEM_NAME win32-${CMAKE_SYSTEM_PROCESSOR})
-      endif()
-    endif()
-    
-    if(NOT DEFINED CPACK_PACKAGE_FILE_NAME)
-      set(CPACK_PACKAGE_FILE_NAME "${CPACK_SOURCE_PACKAGE_FILE_NAME}-${CPACK_SYSTEM_NAME}")
-    endif()
-    
-    set(CPACK_PACKAGE_EXECUTABLES "CGAL" "CGAL")
-
-    if(WIN32 AND NOT UNIX)
-        set(CPACK_GENERATOR "NSIS")
-        # There is a bug in NSI that does not handle full unix paths properly. Make
-        # sure there is at least one set of four (4) backlasshes.
-        #set(CPACK_PACKAGE_ICON "${CGAL_INSTALLATION_PACKAGE_DIR}\\\\cgal_install.gif")
-        #set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\CGAL.exe")
-        set(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_INSTALL_DIRECTORY} Computational Geometry Algorithms Library")
-        set(CPACK_NSIS_HELP_LINK "http:\\\\\\\\www.cgal.org")
-        set(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.cgal.org")
-        set(CPACK_NSIS_CONTACT "info@cgal.org")
-        set(CPACK_NSIS_MODIfY_PATH ON)
-    else()
-        set(CPACK_STRIP_FILES "")
-        set(CPACK_SOURCE_STRIP_FILES "")
-    endif()
-
-    include(CPack)
-    
-endif()
-
-
-if ( CGAL_BRANCH_BUILD )
-  option(CGAL_ENABLE_CHECK_HEADERS 
-    "Enable the special targets \"check_pkg_headers\", and \"check_pkg_<package>_headers\" for each package"
-    FALSE)
-
-  if(CGAL_ENABLE_CHECK_HEADERS)
-
-    if(NOT DEFINED CGAL_CHECK_SYNTAX_ONLY)
-      execute_process(COMMAND 
-        ${CMAKE_CXX_COMPILER} -x c++ -fsyntax-only ${CMAKE_CURRENT_SOURCE_DIR}/config/support/test_syntaxonly.cpp
-        ERROR_QUIET
-        RESULT_VARIABLE ok)
-      if(ok EQUAL 0)
-        set(CGAL_CHECK_SYNTAX_ONLY ON CACHE INTERNAL "")
-      else()
-        set(CGAL_CHECK_SYNTAX_ONLY OFF CACHE INTERNAL "")
-      endif()
-    endif(NOT DEFINED CGAL_CHECK_SYNTAX_ONLY)
-
-    if(NOT CGAL_CHECK_SYNTAX_ONLY)
-      message(FATAL_ERROR "Your compiler does not seem to support -fsyntax-only.
-You must disable CGAL_ENABLE_CHECK_HEADERS.")
-    endif()
-
-    ## Fill the variable include_options with all the -I and -isystem options
-    set(include_options)
-    foreach (incdir ${CGAL_INCLUDE_DIRS})
-      list(APPEND include_options "-I${incdir}")
-    endforeach()
-    foreach (incdir ${CGAL_3RD_PARTY_INCLUDE_DIRS})
-      list(APPEND include_options "-isystem${incdir}")
-    endforeach()
-    include_directories ( SYSTEM ${CGAL_3RD_PARTY_INCLUDE_DIRS} )
-
-    ## Loop on package and headers
-    set(check_pkg_target_list)
-    foreach (package ${CGAL_CONFIGURED_PACKAGES_NAMES})
-      if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../${package}/include)
-        set(depends "")
-        file(GLOB ${package}_HEADERS 
-          RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/../${package}/include" 
-          "${CMAKE_CURRENT_SOURCE_DIR}/../${package}/include/CGAL/*.h")
-        foreach(header ${${package}_HEADERS})
-          string(REPLACE "/" "__" header2 "${header}")
-          string(REPLACE "." "_" header2 "${header2}")
-          add_custom_command(OUTPUT check_${header2}
-            COMMAND ${CMAKE_CXX_COMPILER} ${CGAL_3RD_PARTY_DEFINITIONS} ${CGAL_DEFINITIONS} ${include_options} -x c++ -fsyntax-only "${CMAKE_CURRENT_SOURCE_DIR}/../${package}/include/${header}"
-            COMMAND ${CMAKE_COMMAND} -E touch check_${header2}
-            DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/../${package}/include/${header}"
-            VERBATIM
-            COMMENT "Check header ${header}"
-            )
-          list(APPEND depends check_${header2})
-        endforeach() # look on headers
-        add_custom_target(check_pkg_${package}_headers DEPENDS ${depends})
-        list(APPEND check_pkg_target_list check_pkg_${package}_headers)
-      endif() # if the package has an include directory
-    endforeach() # loop on packages
-    add_custom_target(check_headers DEPENDS ${check_pkg_target_list})
-  endif()
-endif( CGAL_BRANCH_BUILD )
+##option( WITH_CPACK "Create package generation rules")
+#if( WITH_CPACK AND EXISTS "${CMAKE_ROOT}/Modules/CPack.cmake" )
+#
+#    set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "CGAL - Computational Geometry Algorithms Library")
+#    set(CPACK_PACKAGE_VENDOR "CGAL Open Source Project")
+#    set(CPACK_PACKAGE_DESCRIPTION_FILE "${CGAL_INSTALLATION_PACKAGE_DIR}/README")
+#    set(CPACK_RESOURCE_FILE_LICENSE "${CGAL_INSTALLATION_PACKAGE_DIR}/LICENSE")
+#    set(CPACK_PACKAGE_VERSION_MAJOR "${CGAL_MAJOR_VERSION}")
+#    set(CPACK_PACKAGE_VERSION_MINOR "${CGAL_MINOR_VERSION}")
+#    set(CPACK_PACKAGE_VERSION_PATCH "${CGAL_BUGFIX_VERSION}")
+#    set(CPACK_PACKAGE_INSTALL_DIRECTORY "CGAL ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}")
+#    set(CPACK_SOURCE_PACKAGE_FILE_NAME "CGAL-${CGAL_VERSION}")
+#    set(CPACK_RESOURCE_FILE_LICENSE "${CGAL_INSTALLATION_PACKAGE_DIR}/LICENSE")
+#    
+#    if(NOT DEFINED CPACK_SYSTEM_NAME)
+#      set(CPACK_SYSTEM_NAME ${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR})
+#    endif()
+#    
+#    if(${CPACK_SYSTEM_NAME} MATCHES Windows)
+#      if(CMAKE_CL_64)
+#        set(CPACK_SYSTEM_NAME win64-${CMAKE_SYSTEM_PROCESSOR})
+#      else()
+#        set(CPACK_SYSTEM_NAME win32-${CMAKE_SYSTEM_PROCESSOR})
+#      endif()
+#    endif()
+#    
+#    if(NOT DEFINED CPACK_PACKAGE_FILE_NAME)
+#      set(CPACK_PACKAGE_FILE_NAME "${CPACK_SOURCE_PACKAGE_FILE_NAME}-${CPACK_SYSTEM_NAME}")
+#    endif()
+#    
+#    set(CPACK_PACKAGE_EXECUTABLES "CGAL" "CGAL")
+#
+#    if(WIN32 AND NOT UNIX)
+#        set(CPACK_GENERATOR "NSIS")
+#        # There is a bug in NSI that does not handle full unix paths properly. Make
+#        # sure there is at least one set of four (4) backlasshes.
+#        #set(CPACK_PACKAGE_ICON "${CGAL_INSTALLATION_PACKAGE_DIR}\\\\cgal_install.gif")
+#        #set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\CGAL.exe")
+#        set(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_INSTALL_DIRECTORY} Computational Geometry Algorithms Library")
+#        set(CPACK_NSIS_HELP_LINK "http:\\\\\\\\www.cgal.org")
+#        set(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\www.cgal.org")
+#        set(CPACK_NSIS_CONTACT "info@cgal.org")
+#        set(CPACK_NSIS_MODIfY_PATH ON)
+#    else()
+#        set(CPACK_STRIP_FILES "")
+#        set(CPACK_SOURCE_STRIP_FILES "")
+#    endif()
+#
+#    include(CPack)
+#    
+#endif()
+#
+#
+#if ( CGAL_BRANCH_BUILD )
+#  option(CGAL_ENABLE_CHECK_HEADERS 
+#    "Enable the special targets \"check_pkg_headers\", and \"check_pkg_<package>_headers\" for each package"
+#    FALSE)
+#
+#  if(CGAL_ENABLE_CHECK_HEADERS)
+#
+#    if(NOT DEFINED CGAL_CHECK_SYNTAX_ONLY)
+#      execute_process(COMMAND 
+#        ${CMAKE_CXX_COMPILER} -x c++ -fsyntax-only ${CMAKE_CURRENT_SOURCE_DIR}/config/support/test_syntaxonly.cpp
+#        ERROR_QUIET
+#        RESULT_VARIABLE ok)
+#      if(ok EQUAL 0)
+#        set(CGAL_CHECK_SYNTAX_ONLY ON CACHE INTERNAL "")
+#      else()
+#        set(CGAL_CHECK_SYNTAX_ONLY OFF CACHE INTERNAL "")
+#      endif()
+#    endif(NOT DEFINED CGAL_CHECK_SYNTAX_ONLY)
+#
+#    if(NOT CGAL_CHECK_SYNTAX_ONLY)
+#      message(FATAL_ERROR "Your compiler does not seem to support -fsyntax-only.
+#You must disable CGAL_ENABLE_CHECK_HEADERS.")
+#    endif()
+#
+#    ## Fill the variable include_options with all the -I and -isystem options
+#    set(include_options)
+#    foreach (incdir ${CGAL_INCLUDE_DIRS})
+#      list(APPEND include_options "-I${incdir}")
+#    endforeach()
+#    foreach (incdir ${CGAL_3RD_PARTY_INCLUDE_DIRS})
+#      list(APPEND include_options "-isystem${incdir}")
+#    endforeach()
+#    include_directories ( SYSTEM ${CGAL_3RD_PARTY_INCLUDE_DIRS} )
+#
+#    ## Loop on package and headers
+#    set(check_pkg_target_list)
+#    foreach (package ${CGAL_CONFIGURED_PACKAGES_NAMES})
+#      if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../${package}/include)
+#        set(depends "")
+#        file(GLOB ${package}_HEADERS 
+#          RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/../${package}/include" 
+#          "${CMAKE_CURRENT_SOURCE_DIR}/../${package}/include/CGAL/*.h")
+#        foreach(header ${${package}_HEADERS})
+#          string(REPLACE "/" "__" header2 "${header}")
+#          string(REPLACE "." "_" header2 "${header2}")
+#          add_custom_command(OUTPUT check_${header2}
+#            COMMAND ${CMAKE_CXX_COMPILER} ${CGAL_3RD_PARTY_DEFINITIONS} ${CGAL_DEFINITIONS} ${include_options} -x c++ -fsyntax-only "${CMAKE_CURRENT_SOURCE_DIR}/../${package}/include/${header}"
+#            COMMAND ${CMAKE_COMMAND} -E touch check_${header2}
+#            DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/../${package}/include/${header}"
+#            VERBATIM
+#            COMMENT "Check header ${header}"
+#            )
+#          list(APPEND depends check_${header2})
+#        endforeach() # look on headers
+#        add_custom_target(check_pkg_${package}_headers DEPENDS ${depends})
+#        list(APPEND check_pkg_target_list check_pkg_${package}_headers)
+#      endif() # if the package has an include directory
+#    endforeach() # loop on packages
+#    add_custom_target(check_headers DEPENDS ${check_pkg_target_list})
+#  endif()
+#endif( CGAL_BRANCH_BUILD )

@@ -36,47 +36,58 @@ function (collect_cgal_library LIBRARY_NAME ADDITIONAL_FILES)
     set(rc_file )
   endif()
 
-  add_library (${LIBRARY_NAME}
-    ${CMAKE_CURRENT_BINARY_DIR}/all_files.cpp 
-    ${rc_file}
-    ${ADDITIONAL_FILES})
+  #add_library (${LIBRARY_NAME}
+  #  ${CMAKE_CURRENT_BINARY_DIR}/all_files.cpp 
+  #  ${rc_file}
+  #  ${ADDITIONAL_FILES})
+  yong_add_library(${LIBRARY_NAME}
+    LIB_TYPE STATIC
+    SOURCES ${CMAKE_CURRENT_BINARY_DIR}/all_files.cpp
+            ${rc_file}
+            ${ADDITIONAL_FILES})
 #  add_library (${LIBRARY_NAME} ${CGAL_LIBRARY_SOURCE_FILES} ${rc_file} ${ADDITIONAL_FILES}) # builing not creating temporary all_files.cpp
-  if(CGAL_SOVERSION AND CGAL_SONAME_VERSION)
-    set_target_properties(${LIBRARY_NAME} PROPERTIES 
-      VERSION "${CGAL_SOVERSION}" 
-      SOVERSION "${CGAL_SONAME_VERSION}")
-  endif()
+#  if(CGAL_SOVERSION AND CGAL_SONAME_VERSION)
+#    set_target_properties(${LIBRARY_NAME} PROPERTIES 
+#      VERSION "${CGAL_SOVERSION}" 
+#      SOVERSION "${CGAL_SONAME_VERSION}")
+#  endif()
 
-  if (NOT CGAL_AUTO_LINK_ENABLED )
-    get_target_property( ${LIBRARY_NAME}_LIBRARY_FULL_PATH ${LIBRARY_NAME} LOCATION  )
-  
-    set(${LIBRARY_NAME}_LIBRARY ${${LIBRARY_NAME}_LIBRARY_FULL_PATH} CACHE STRING "The ${LIBRARY_NAME} library" FORCE)
-    mark_as_advanced(${LIBRARY_NAME}_LIBRARY)
-  else(NOT CGAL_AUTO_LINK_ENABLED)
-    set(${LIBRARY_NAME}_LIBRARY)
-
-    set_target_properties( ${LIBRARY_NAME} PROPERTIES 
-      OUTPUT_NAME_DEBUG          "${DEBUG_MANGLED_NAME}" 
-      OUTPUT_NAME_RELEASE        "${RELEASE_MANGLED_NAME}" 
-      OUTPUT_NAME_MINSIZEREL     "${RELEASE_MANGLED_NAME}" 
-      OUTPUT_NAME_RELWITHDEBINFO "${RELEASE_MANGLED_NAME}" 
-      )
-    
-    if ( HAS_CFG_INTDIR )
-      add_custom_command(TARGET ${LIBRARY_NAME} POST_BUILD COMMAND if exist \"$(TargetDir)$(TargetName).dll\" copy /Y \"$(TargetDir)$(TargetName).dll\" \"$(TargetDir)..\" )
-      add_custom_command(TARGET ${LIBRARY_NAME} POST_BUILD COMMAND if exist \"$(TargetDir)$(TargetName).pdb\" copy /Y \"$(TargetDir)$(TargetName).pdb\" \"$(TargetDir)..\" )
-      add_custom_command(TARGET ${LIBRARY_NAME} POST_BUILD COMMAND if exist \"$(SolutionDir)lib\\$(ConfigurationName)\\$(TargetName).lib\" copy /Y \"$(SolutionDir)lib\\$(ConfigurationName)\\$(TargetName).lib\" \"$(SolutionDir)lib\" )
-    endif()
-  endif(NOT CGAL_AUTO_LINK_ENABLED)
-
-  install(TARGETS ${LIBRARY_NAME}
-          RUNTIME DESTINATION ${CGAL_INSTALL_BIN_DIR}
-          LIBRARY DESTINATION ${CGAL_INSTALL_LIB_DIR}
-          ARCHIVE DESTINATION ${CGAL_INSTALL_LIB_DIR})
+#  if (NOT CGAL_AUTO_LINK_ENABLED )
+#    get_target_property( ${LIBRARY_NAME}_LIBRARY_FULL_PATH ${LIBRARY_NAME} LOCATION  )
+#  
+#    set(${LIBRARY_NAME}_LIBRARY ${${LIBRARY_NAME}_LIBRARY_FULL_PATH} CACHE STRING "The ${LIBRARY_NAME} library" FORCE)
+#    mark_as_advanced(${LIBRARY_NAME}_LIBRARY)
+#  else(NOT CGAL_AUTO_LINK_ENABLED)
+#    set(${LIBRARY_NAME}_LIBRARY)
+#
+#    set_target_properties( ${LIBRARY_NAME} PROPERTIES 
+#      OUTPUT_NAME_DEBUG          "${DEBUG_MANGLED_NAME}" 
+#      OUTPUT_NAME_RELEASE        "${RELEASE_MANGLED_NAME}" 
+#      OUTPUT_NAME_MINSIZEREL     "${RELEASE_MANGLED_NAME}" 
+#      OUTPUT_NAME_RELWITHDEBINFO "${RELEASE_MANGLED_NAME}" 
+#      )
+#    
+#    if ( HAS_CFG_INTDIR )
+#      add_custom_command(TARGET ${LIBRARY_NAME} POST_BUILD COMMAND if exist \"$(TargetDir)$(TargetName).dll\" copy /Y \"$(TargetDir)$(TargetName).dll\" \"$(TargetDir)..\" )
+#      add_custom_command(TARGET ${LIBRARY_NAME} POST_BUILD COMMAND if exist \"$(TargetDir)$(TargetName).pdb\" copy /Y \"$(TargetDir)$(TargetName).pdb\" \"$(TargetDir)..\" )
+#      add_custom_command(TARGET ${LIBRARY_NAME} POST_BUILD COMMAND if exist \"$(SolutionDir)lib\\$(ConfigurationName)\\$(TargetName).lib\" copy /Y \"$(SolutionDir)lib\\$(ConfigurationName)\\$(TargetName).lib\" \"$(SolutionDir)lib\" )
+#    endif()
+#  endif(NOT CGAL_AUTO_LINK_ENABLED)
+yong_add_dependence(CGAL ${LIBRARY_NAME}
+  DEPENDENT_PROJECT boost
+    COMMIT_HASH ${BOOST_HASH}
+    DEPENDENT_LIBS boost_system boost_thread
+    )
+yong_add_library_end(${LIBRARY_NAME})
+#
+#  install(TARGETS ${LIBRARY_NAME}
+#          RUNTIME DESTINATION ${CGAL_INSTALL_BIN_DIR}
+#          LIBRARY DESTINATION ${CGAL_INSTALL_LIB_DIR}
+#          ARCHIVE DESTINATION ${CGAL_INSTALL_LIB_DIR})
 endfunction()
 
 function( configure_component DIR COMPONENT )
-  option( WITH_${COMPONENT} "Enable CGAL component ${COMPONENT}" ON)
+  #option( WITH_${COMPONENT} "Enable CGAL component ${COMPONENT}" ON)
   if ( WITH_${COMPONENT})
     add_subdirectory( ${DIR} ${COMPONENT} )
   endif()

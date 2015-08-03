@@ -82,4 +82,4 @@ if( NOT GMP_FOUND )
 endif( NOT GMP_FOUND )
 
 # finally setup Boost
-include(CGAL_SetupBoost)
+#include(CGAL_SetupBoost)
