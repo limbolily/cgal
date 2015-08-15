@@ -34,7 +34,7 @@ set(WITH_CGAL_Qt3 FALSE)
 set(WITH_CGAL_Qt4 FALSE)
 add_definitions(-DBOOST_ALL_NO_LIB -DCGAL_NO_AUTOLINK)
 
-set(BOOST_HASH a24ea08cf80df33730c0eb447cb8c3a86cebfcb7)
+set(BOOST_HASH 26debece6b53cb0dcf053f0ecf4cbfcfcbd6c574)
 
 # and finally start actual build
 add_subdirectory( Installation )
