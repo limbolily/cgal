@@ -75,7 +75,6 @@ function (collect_cgal_library LIBRARY_NAME ADDITIONAL_FILES)
 #  endif(NOT CGAL_AUTO_LINK_ENABLED)
 yong_add_dependence(CGAL ${LIBRARY_NAME}
   DEPENDENT_PROJECT boost
-    COMMIT_HASH ${BOOST_HASH}
     DEPENDENT_LIBS boost_system boost_thread
     )
 yong_add_library_end(${LIBRARY_NAME})
